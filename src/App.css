@@ -11,7 +11,7 @@ html,body {
   flex-direction: column;
   border: 2px solid rgba(220,100,0,0.9);
   font-family: monospace;
-  font-size: calc(9px + 1.5vmax);
+  font-size: calc(12px + 1.5vmax);
   box-sizing: border-box;
 }
 
@@ -58,7 +58,7 @@ html,body {
 }
 
 img {
-    width: calc(100% - 20px);
+    width: calc(100%);
 }
 
 .Post h1 {
@@ -91,3 +91,19 @@ pre code {
     background: none;
 }
 
+button {
+    font-family: inherit;
+    padding: 10px;
+    padding-left: 40px;
+    padding-right: 40px;
+    background-color:none;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 5px;
+    color: rgba(200, 100, 50, 1);
+    font-size: 0.7em;
+    width: 100%;
+}
+
+.ReactMarkdown {
+    margin-bottom: 40px;
+}

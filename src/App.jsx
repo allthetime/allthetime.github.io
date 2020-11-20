@@ -4,6 +4,14 @@ import { about, at_post } from './data.json'
 import ReactMarkdown from 'react-markdown'
 import { DiscussionEmbed } from 'disqus-react';
 
+import {
+    BrowserRouter,
+    HashRouter,
+    Switch,
+    Route,
+    Link
+  } from "react-router-dom";
+
 type postObj = {
     md: string;
     filename: string;
@@ -15,20 +23,18 @@ const empty: posts = [];
 function App() {
 
   const [posts, setPosts] = React.useState(empty);
-  const [currentPost, setCurrentPost] = React.useState("001");
+  const [currentPost, setCurrentPost] = React.useState(null);
 
   const showComments = (filename:string) => {
-      console.log('set '+filename)
-    // window.DISQUS.reset({
-    //     reload: true,
-    //     config: function () {  
-    //     console.log('THIS', this, this.page)
-    //       this.page.identifier = filename;  
-    //       this.page.url = "https://allthetime.github.io/#!"+filename;
-    //     }
-    //   });      
+      if (window.DISQUS) window.DISQUS.reset({
+        reload: true,
+        config: function () {  
+          console.log(this);
+          this.page.identifier = filename;  
+          this.page.url = "https://allthetime.github.io/"+filename;
+        }
+      });           
       setCurrentPost(filename);
-
   }
 
   function getPosts() {
@@ -51,46 +57,50 @@ function App() {
 
   React.useEffect(getPosts,[])
 
-  const postObjects = posts.map((p,index)=>{
-    return (
-        <div className="Post">
-            <span className="fileName" id={p.filename}>{p.filename}</span>
-            <div className="PostWrapper">
-                <ReactMarkdown children={p.md}/>
-                <button
-                    onClick={()=>{
-                        showComments(p.filename);
-                        setTimeout(()=>{
-                            showComments(p.filename);
-                        }, 500)
-                    }}
-                >
-                    SHOW COMMENTS
-                </button>
-                { currentPost == p.filename &&  
-                    <DiscussionEmbed
-                        shortname={'https-allthetime-github-io'}
-                        config={
-                            {
-                                url: "https://allthetime.github.io/#!"+p.filename,
-                                identifier: p.filename,
-                                title: p.filename,
-                                language: 'english'
+  const Posts = (props)=>{
+    const postObjects = posts.map((p,index)=>{
+        const commentsEnabled = currentPost == p.filename;
+        return (
+            <div className="Post">
+                <span className="fileName" id={p.filename}>{p.filename}</span>
+                <div className="PostWrapper">
+                    <ReactMarkdown className="ReactMarkdown" children={p.md}/>
+                    {
+                        !commentsEnabled && <button
+                            onClick={()=>{
+                                props.history.push('/'+p.filename)
+                                showComments(p.filename);
+                            }}
+                        >
+                            SHOW COMMENTS
+                        </button>
+                    }
+                    { 
+                        commentsEnabled && <DiscussionEmbed
+                            shortname={'https-allthetime-github-io'}
+                            config={
+                                {
+                                    url: "https://allthetime.github.io/"+p.filename,
+                                    identifier: p.filename+"_0",
+                                    title: p.filename,
+                                }
                             }
-                        }
-                    />                
-                }
+                        />                
+                    }
+                </div>
             </div>
-        </div>
-    )
-  })
+        )
+      })
+
+      return <div className="Posts">{ postObjects }</div>;
+  }
 
   return (
     <div className="App">
         <span className="aboutText">{ about }</span>
-        <div className="Posts">{
-            postObjects
-        }</div>
+        <BrowserRouter basename='/'>
+            <Route path='/' component={Posts}/>
+        </BrowserRouter>
     </div>
   );
 }
