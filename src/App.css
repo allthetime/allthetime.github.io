@@ -58,7 +58,7 @@ html,body {
 }
 
 img {
-    width: calc(100vmin - 160px)
+    width: calc(100% - 20px);
 }
 
 .Post h1 {
