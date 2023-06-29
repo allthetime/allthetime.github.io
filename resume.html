@@ -1,0 +1,113 @@
+<html>
+
+    <head>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Christopher Reid</title>
+        <link rel="stylesheet" href="styles.css"/>
+
+    </head>
+
+    <body>
+
+        <canvas></canvas>
+
+        <div id="darkmode-selector">
+            <input id="darkmode" type="checkbox"></input>
+            <label for="darkmode"></label>
+        </div>
+
+        <header>
+            <h1>Christopher Reid</h1>
+            <h3><i>software</i> development & design</h3>
+        </header>
+
+        <section>
+            <div class="skill-container" data-skills="react-native, css, linux, postgresql, redis, aws, zmq, web3, interaction-design"></div>
+        </section>
+
+        <article>
+            <h2 class="link" data-link="https://onthisspot.ca" style="color:var(--blue)">On This Spot</h2>
+            <h3>CTO, Developer, Architect</h3>
+            <h4>App, Web, Data, Ops, Management</h4>
+            <section class="body-text">
+                <p>On This Spot is a historical education and walking tour app based on the exact location of old photos. Users can visit these spots and compare and contrast the past and the present through interactive photography and high quality written history.</p>
+                <p>The android and ios apps are made with react-native and make heavy use of the mapbox library. Custom GLSL is used to create an image editor that allows users to make their own then & now photos.</p>
+                <p>The website is a mixure of react components and server-rendered templates that is currently being re-written in nextjs to close the static/dynamic divide.</p>
+                <p>The backend includes a collection of node-express apis, a postgres database, and a small image resizing and caching service written in rust.</p>
+                <p>All code written by me and co-op students under my mentorship and direction.</p>
+            </section>
+        </article>
+
+        <article>
+            <h2 class="link" data-link="https://casca.com/pages/smartfit" style="color:var(--yellow)">Casca Footwear</h2>
+            <h3>Developer & Architect</h3>
+            <h4>App, Data, Ops</h4>
+            <section>
+                <span>Built it out </span>
+            </section>
+        </article>
+
+        <article>
+            <h2 class="link" data-link="https://ceo.ca" style="color:var(--red)">CEO.ca</h2>
+            <h3>Developer</h3>
+            <h4>Web, App, Data, Ops</h4>
+            <section>
+                
+                <span>Hi, I'm Chris. </span>
+            </section>
+        </article>
+    
+        
+        <script type="text/javascript">
+
+            //
+            // Render Skills
+            //
+
+            const skill_container = document.querySelector('.skill-container');
+            const skills = skill_container.getAttribute('data-skills').replace(/\s/g,'').split(',')
+            const skills_html = skills.map(skill=>`<span class="skill-pill">${skill}</span>`).join('');
+            skill_container.innerHTML = skill_container.innerHTML + skills_html;
+
+            //
+            // Make Links
+            //
+
+            const h2s = document.querySelectorAll('h2');
+            h2s.forEach(h2=>{
+                h2.onclick = function () {
+                    const link = this.getAttribute('data-link');
+                    window.open(link, "_blank");
+                }
+            });
+
+            //
+            // Darkmode Stuff
+            //
+
+            const darkmode_checkbox = document.querySelector('input[type="checkbox"]')
+            let canvas = document.querySelector('canvas');
+
+            if (!darkmode_checkbox.checked) {
+                document.body.classList.add('dark');
+            } else {
+                canvas.classList.add('invisible');
+            }
+
+            darkmode_checkbox.onchange = function() {
+                const { checked } = this;
+                if (!checked) {
+                    document.body.classList.add('dark');
+                    canvas.classList.remove('invisible');
+                } else {
+                    document.body.classList.remove('dark');
+                    canvas.classList.add('invisible');
+                }
+            }
+        </script>
+
+        <script type="text/javascript" src="starscape.js"></script>
+        <script type="text/javascript" src="grab.js"></script>
+    </body>
+</html>
